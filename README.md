@@ -25,7 +25,7 @@ Installation
 Customizing layout
 ---
 
-You can customize visual output of plugin quite simple. In your active theme directory make new directory named trello-voting, copy voting.php and/or results.php from plugins/trello-voting/views/ to that directory and start modifying.
+Customizing the visual output is quite simple. In your active theme directory make a new directory named trello-voting, copy voting.php and/or results.php from plugins/trello-voting/views/ to that directory and start modifying.
 
 Note that you can't modify element id's or remove classes .description, .card and .more-link from elements. If you modify id's note that you need to change those also in trello_vote_js.js file.
 
