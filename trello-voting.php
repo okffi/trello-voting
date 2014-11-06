@@ -2,7 +2,7 @@
 /*
 Plugin Name: Trello voting
 Description: Simple plugin for voting things in trello board
-Version: 1.0
+Version: 1.1
 Author: Contrast Digital
 Author URI: http://contrast.fi/en
 License: GPL2
@@ -94,7 +94,13 @@ if(!class_exists('TrelloVoting')) {
         function voting($atts) {
         	// Localize our javascript file and add it to the page
         	wp_register_script( "trello_vote_js", plugins_url('includes/trello_vote_js.js', __FILE__), array('jquery') );
-   			wp_localize_script( 'trello_vote_js', 'trellovotingAjax', array('ajaxurl' => admin_url( 'admin-ajax.php' ), 'trellourl' => $atts['trello'], 'votingerr' => __('Error while registering your vote', 'trellovoting'), 'fetcherr' => __('New cards could not be fetched, please reload page', 'trellovoting')));
+   			wp_localize_script( 'trello_vote_js', 'trellovotingAjax', array(
+   				'ajaxurl' => admin_url( 'admin-ajax.php' ),
+   				'trellourl' => $atts['trello'],
+   				'include_labels' => $atts['include_labels'],
+   				'votingerr' => __('Error while registering your vote', 'trellovoting'),
+   				'fetcherr' => __('New cards could not be fetched, please reload page', 'trellovoting'),
+   			));
    			wp_enqueue_script( 'jquery' );
   			wp_enqueue_script( 'trello_vote_js' );
 
@@ -117,6 +123,7 @@ if(!class_exists('TrelloVoting')) {
 					$return['status'] = false;
 				} else {
 					$cards = array();
+					$include_labels = (!empty($_REQUEST['include_labels'])) ? explode('|', $_REQUEST['include_labels']) : array() ;
 
 					foreach ($data['cards'] as $card) {
 						if(!empty($card['labels'])) {
@@ -136,8 +143,10 @@ if(!class_exists('TrelloVoting')) {
 							);
 
 							foreach ($card['labels'] as $label) {
-								$label_name = $label['name'];
-								$cards[ $label_name ][] = $card_data;
+								if(in_array(strtolower($label['name']), $include_labels)) {
+									$label_name = $label['name'];
+									$cards[ $label_name ][] = $card_data;
+								}
 							}
 						} // endif !empty($card['labels'])
 					} // end foreach
@@ -209,8 +218,8 @@ if(!class_exists('TrelloVoting')) {
 			if($data === FALSE) {
 				$return['status'] = false;
 			} else {
-				//$cards = array();
 				$return = array();
+				$include_labels = (!empty($atts['include_labels'])) ? explode('|', $atts['include_labels']) : array() ;
 
 				// Make Trello data usable
 				foreach ($data['cards'] as $card) {
@@ -224,7 +233,7 @@ if(!class_exists('TrelloVoting')) {
 						);
 
 						foreach ($card['labels'] as $label) {
-							if($card_data['votes'] != null) {
+							if($card_data['votes'] != null && in_array(strtolower($label['name']), $include_labels)) {
 								$label_name = $label['name'];
 								$return[ $label_name ][] = $card_data;
 							}

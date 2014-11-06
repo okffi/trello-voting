@@ -6,7 +6,7 @@ jQuery(document).ready( function() {
       type: "post",
       dataType: "json",
       url: trellovotingAjax.ajaxurl,
-      data: {action: "trello_load_data", trellourl: trellovotingAjax.trellourl},
+      data: {action: "trello_load_data", trellourl: trellovotingAjax.trellourl, include_labels: trellovotingAjax.include_labels},
       success: function(response) {
          if(response.status == true) {
             cards = response.cards;
