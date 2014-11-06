@@ -10,16 +10,18 @@ Installation
 
 2. Add shortcode into that page where you want to show voting.
 ```
-[trello_voting trello="JSON-DATA-URL" redirect="THANKS-PAGE"]
+[trello_voting trello="JSON-DATA-URL" redirect="THANKS-PAGE" include_labels="LABELS"]
 ```
     * Replace JSON-DATA-URL with address to your Trello board JSON export
     * Replace THANKS-PAGE with address where results shortcode is
+    * Replace LABELS with label names what you want to show, if multiple labels use seperator |
 
 3. Add shortcode into that page where you want to show voting results
 ```
-[trello_voting_results trello="JSON-DATA-URL"]
+[trello_voting_results trello="JSON-DATA-URL" include_labels="LABELS"]
 ```
     * Replace JSON-DATA-URL with same address as in voting shortcode
+    * Replace LABELS with label names what you want to show, if multiple labels use seperator |
 
 
 Customizing layout
